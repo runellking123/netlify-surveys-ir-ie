@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division of Business and Finance Assessment Survey | Wiley University</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #3D2C68;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #3D2C68;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px 0;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        .radio-group {
+            margin: 15px 0;
+        }
+        .radio-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        button {
+            background-color: #3D2C68;
+            color: white;
+            padding: 15px 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #65538F;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>WILEY UNIVERSITY</h1>
+        <p>Division of Business and Finance Assessment Survey</p>
+    </div>
+
+    <form id="surveyForm">
+        <div class="section">
+            <h2>Respondent Information</h2>
+
+            <label class="required">Your Role at Wiley University</label>
+            <select name="employeeRole" required>
+                <option value="">-- Select your role --</option>
+                <option value="faculty">Faculty</option>
+                <option value="staff">Staff</option>
+                <option value="administrator">Administrator</option>
+                <option value="student-worker">Student Worker</option>
+                <option value="contractor">Contractor</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label class="required">Your Department/Division</label>
+            <input type="text" name="department" required>
+
+            <label class="required">Years of Employment at Wiley University</label>
+            <select name="yearsEmployed" required>
+                <option value="">-- Select range --</option>
+                <option value="less-than-1">Less than 1 year</option>
+                <option value="1-3">1-3 years</option>
+                <option value="4-6">4-6 years</option>
+                <option value="7-10">7-10 years</option>
+                <option value="more-than-10">More than 10 years</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <h2>Department Interactions</h2>
+
+            <label>Please select all departments you have had interactions with in the past 12 months:</label>
+            <div style="margin: 15px 0;">
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_auxiliary" value="yes"> Auxiliary Services
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_business" value="yes"> Business Office
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_facilities" value="yes"> Facilities Management
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_financial" value="yes"> Financial Aid
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_it" value="yes"> Information Technology
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_risk" value="yes"> Risk Management
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_student" value="yes"> Student Accounts
+                </label>
+                <label style="display: block; margin: 8px 0; font-weight: normal;">
+                    <input type="checkbox" name="dept_transport" value="yes"> Transportation & Fleet Management
+                </label>
+            </div>
+
+            <label>How frequently do you interact with Business and Finance departments?</label>
+            <select name="interactionFrequency">
+                <option value="">-- Select frequency --</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="annually">Annually or less</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <h2>Service Quality Ratings</h2>
+            <p style="margin-bottom: 20px;">For departments you have interacted with, please rate the following:</p>
+
+            <label>Staff members are courteous and professional</label>
+            <div class="radio-group">
+                <label><input type="radio" name="staff_courtesy" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="staff_courtesy" value="2"> Disagree</label>
+                <label><input type="radio" name="staff_courtesy" value="3"> Neutral</label>
+                <label><input type="radio" name="staff_courtesy" value="4"> Agree</label>
+                <label><input type="radio" name="staff_courtesy" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="staff_courtesy" value="na"> N/A</label>
+            </div>
+
+            <label>Services are provided in a timely manner</label>
+            <div class="radio-group">
+                <label><input type="radio" name="service_timeliness" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="service_timeliness" value="2"> Disagree</label>
+                <label><input type="radio" name="service_timeliness" value="3"> Neutral</label>
+                <label><input type="radio" name="service_timeliness" value="4"> Agree</label>
+                <label><input type="radio" name="service_timeliness" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="service_timeliness" value="na"> N/A</label>
+            </div>
+
+            <label>Quality of services meets my expectations</label>
+            <div class="radio-group">
+                <label><input type="radio" name="service_quality" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="service_quality" value="2"> Disagree</label>
+                <label><input type="radio" name="service_quality" value="3"> Neutral</label>
+                <label><input type="radio" name="service_quality" value="4"> Agree</label>
+                <label><input type="radio" name="service_quality" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="service_quality" value="na"> N/A</label>
+            </div>
+
+            <label>Communication is clear and effective</label>
+            <div class="radio-group">
+                <label><input type="radio" name="communication" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="communication" value="2"> Disagree</label>
+                <label><input type="radio" name="communication" value="3"> Neutral</label>
+                <label><input type="radio" name="communication" value="4"> Agree</label>
+                <label><input type="radio" name="communication" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="communication" value="na"> N/A</label>
+            </div>
+
+            <label>Issues and concerns are resolved satisfactorily</label>
+            <div class="radio-group">
+                <label><input type="radio" name="issue_resolution" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="issue_resolution" value="2"> Disagree</label>
+                <label><input type="radio" name="issue_resolution" value="3"> Neutral</label>
+                <label><input type="radio" name="issue_resolution" value="4"> Agree</label>
+                <label><input type="radio" name="issue_resolution" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="issue_resolution" value="na"> N/A</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Auxiliary Services Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Auxiliary Services (dining, bookstore, mail services)</p>
+
+            <label>Operating hours are convenient</label>
+            <div class="radio-group">
+                <label><input type="radio" name="aux_hours" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="aux_hours" value="2"> Disagree</label>
+                <label><input type="radio" name="aux_hours" value="3"> Neutral</label>
+                <label><input type="radio" name="aux_hours" value="4"> Agree</label>
+                <label><input type="radio" name="aux_hours" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="aux_hours" value="na"> N/A</label>
+            </div>
+
+            <label>Pricing is fair and reasonable</label>
+            <div class="radio-group">
+                <label><input type="radio" name="aux_pricing" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="aux_pricing" value="2"> Disagree</label>
+                <label><input type="radio" name="aux_pricing" value="3"> Neutral</label>
+                <label><input type="radio" name="aux_pricing" value="4"> Agree</label>
+                <label><input type="radio" name="aux_pricing" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="aux_pricing" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Auxiliary Services</label>
+            <textarea name="aux_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Business Office Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Business Office (purchasing, budget, financial reporting)</p>
+
+            <label>Purchase orders are processed efficiently</label>
+            <div class="radio-group">
+                <label><input type="radio" name="bus_po" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="bus_po" value="2"> Disagree</label>
+                <label><input type="radio" name="bus_po" value="3"> Neutral</label>
+                <label><input type="radio" name="bus_po" value="4"> Agree</label>
+                <label><input type="radio" name="bus_po" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="bus_po" value="na"> N/A</label>
+            </div>
+
+            <label>Reimbursements are processed in a timely manner</label>
+            <div class="radio-group">
+                <label><input type="radio" name="bus_reimburse" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="bus_reimburse" value="2"> Disagree</label>
+                <label><input type="radio" name="bus_reimburse" value="3"> Neutral</label>
+                <label><input type="radio" name="bus_reimburse" value="4"> Agree</label>
+                <label><input type="radio" name="bus_reimburse" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="bus_reimburse" value="na"> N/A</label>
+            </div>
+
+            <label>Budget information is accurate and accessible</label>
+            <div class="radio-group">
+                <label><input type="radio" name="bus_budget" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="bus_budget" value="2"> Disagree</label>
+                <label><input type="radio" name="bus_budget" value="3"> Neutral</label>
+                <label><input type="radio" name="bus_budget" value="4"> Agree</label>
+                <label><input type="radio" name="bus_budget" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="bus_budget" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Business Office</label>
+            <textarea name="bus_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Facilities Management Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Facilities Management (maintenance, grounds, custodial)</p>
+
+            <label>Work orders are completed in a timely manner</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fac_workorder" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="fac_workorder" value="2"> Disagree</label>
+                <label><input type="radio" name="fac_workorder" value="3"> Neutral</label>
+                <label><input type="radio" name="fac_workorder" value="4"> Agree</label>
+                <label><input type="radio" name="fac_workorder" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="fac_workorder" value="na"> N/A</label>
+            </div>
+
+            <label>Buildings are well-maintained and clean</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fac_clean" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="fac_clean" value="2"> Disagree</label>
+                <label><input type="radio" name="fac_clean" value="3"> Neutral</label>
+                <label><input type="radio" name="fac_clean" value="4"> Agree</label>
+                <label><input type="radio" name="fac_clean" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="fac_clean" value="na"> N/A</label>
+            </div>
+
+            <label>HVAC systems maintain comfortable temperatures</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fac_hvac" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="fac_hvac" value="2"> Disagree</label>
+                <label><input type="radio" name="fac_hvac" value="3"> Neutral</label>
+                <label><input type="radio" name="fac_hvac" value="4"> Agree</label>
+                <label><input type="radio" name="fac_hvac" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="fac_hvac" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Facilities Management</label>
+            <textarea name="fac_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Financial Aid Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Financial Aid</p>
+
+            <label>Award packages are processed in a timely manner</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fin_timeliness" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="fin_timeliness" value="2"> Disagree</label>
+                <label><input type="radio" name="fin_timeliness" value="3"> Neutral</label>
+                <label><input type="radio" name="fin_timeliness" value="4"> Agree</label>
+                <label><input type="radio" name="fin_timeliness" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="fin_timeliness" value="na"> N/A</label>
+            </div>
+
+            <label>Staff demonstrates knowledge of federal/state aid programs</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fin_knowledge" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="fin_knowledge" value="2"> Disagree</label>
+                <label><input type="radio" name="fin_knowledge" value="3"> Neutral</label>
+                <label><input type="radio" name="fin_knowledge" value="4"> Agree</label>
+                <label><input type="radio" name="fin_knowledge" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="fin_knowledge" value="na"> N/A</label>
+            </div>
+
+            <label>Financial literacy resources are helpful</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fin_literacy" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="fin_literacy" value="2"> Disagree</label>
+                <label><input type="radio" name="fin_literacy" value="3"> Neutral</label>
+                <label><input type="radio" name="fin_literacy" value="4"> Agree</label>
+                <label><input type="radio" name="fin_literacy" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="fin_literacy" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Financial Aid</label>
+            <textarea name="fin_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Information Technology Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Information Technology</p>
+
+            <label>Help desk support is responsive and helpful</label>
+            <div class="radio-group">
+                <label><input type="radio" name="it_helpdesk" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="it_helpdesk" value="2"> Disagree</label>
+                <label><input type="radio" name="it_helpdesk" value="3"> Neutral</label>
+                <label><input type="radio" name="it_helpdesk" value="4"> Agree</label>
+                <label><input type="radio" name="it_helpdesk" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="it_helpdesk" value="na"> N/A</label>
+            </div>
+
+            <label>Network connectivity is reliable</label>
+            <div class="radio-group">
+                <label><input type="radio" name="it_network" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="it_network" value="2"> Disagree</label>
+                <label><input type="radio" name="it_network" value="3"> Neutral</label>
+                <label><input type="radio" name="it_network" value="4"> Agree</label>
+                <label><input type="radio" name="it_network" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="it_network" value="na"> N/A</label>
+            </div>
+
+            <label>Software and systems meet my work needs</label>
+            <div class="radio-group">
+                <label><input type="radio" name="it_software" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="it_software" value="2"> Disagree</label>
+                <label><input type="radio" name="it_software" value="3"> Neutral</label>
+                <label><input type="radio" name="it_software" value="4"> Agree</label>
+                <label><input type="radio" name="it_software" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="it_software" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Information Technology</label>
+            <textarea name="it_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Risk Management Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Risk Management</p>
+
+            <label>Staff provides clear guidance on risk-related policies</label>
+            <div class="radio-group">
+                <label><input type="radio" name="risk_guidance" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="risk_guidance" value="2"> Disagree</label>
+                <label><input type="radio" name="risk_guidance" value="3"> Neutral</label>
+                <label><input type="radio" name="risk_guidance" value="4"> Agree</label>
+                <label><input type="radio" name="risk_guidance" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="risk_guidance" value="na"> N/A</label>
+            </div>
+
+            <label>Safety training is effective and relevant</label>
+            <div class="radio-group">
+                <label><input type="radio" name="risk_safety" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="risk_safety" value="2"> Disagree</label>
+                <label><input type="radio" name="risk_safety" value="3"> Neutral</label>
+                <label><input type="radio" name="risk_safety" value="4"> Agree</label>
+                <label><input type="radio" name="risk_safety" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="risk_safety" value="na"> N/A</label>
+            </div>
+
+            <label>Emergency procedures are well-communicated</label>
+            <div class="radio-group">
+                <label><input type="radio" name="risk_emergency" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="risk_emergency" value="2"> Disagree</label>
+                <label><input type="radio" name="risk_emergency" value="3"> Neutral</label>
+                <label><input type="radio" name="risk_emergency" value="4"> Agree</label>
+                <label><input type="radio" name="risk_emergency" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="risk_emergency" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Risk Management</label>
+            <textarea name="risk_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Student Accounts Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Student Accounts</p>
+
+            <label>Billing statements are clear and accurate</label>
+            <div class="radio-group">
+                <label><input type="radio" name="sa_billing" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="sa_billing" value="2"> Disagree</label>
+                <label><input type="radio" name="sa_billing" value="3"> Neutral</label>
+                <label><input type="radio" name="sa_billing" value="4"> Agree</label>
+                <label><input type="radio" name="sa_billing" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="sa_billing" value="na"> N/A</label>
+            </div>
+
+            <label>Payment options are convenient and accessible</label>
+            <div class="radio-group">
+                <label><input type="radio" name="sa_payment" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="sa_payment" value="2"> Disagree</label>
+                <label><input type="radio" name="sa_payment" value="3"> Neutral</label>
+                <label><input type="radio" name="sa_payment" value="4"> Agree</label>
+                <label><input type="radio" name="sa_payment" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="sa_payment" value="na"> N/A</label>
+            </div>
+
+            <label>Refunds are processed in a timely manner</label>
+            <div class="radio-group">
+                <label><input type="radio" name="sa_refunds" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="sa_refunds" value="2"> Disagree</label>
+                <label><input type="radio" name="sa_refunds" value="3"> Neutral</label>
+                <label><input type="radio" name="sa_refunds" value="4"> Agree</label>
+                <label><input type="radio" name="sa_refunds" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="sa_refunds" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Student Accounts</label>
+            <textarea name="sa_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Transportation & Fleet Management Assessment</h2>
+            <p style="margin-bottom: 20px; font-style: italic;">Rate the following for Transportation & Fleet Management</p>
+
+            <label>Vehicle reservation process is efficient</label>
+            <div class="radio-group">
+                <label><input type="radio" name="trans_reservation" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="trans_reservation" value="2"> Disagree</label>
+                <label><input type="radio" name="trans_reservation" value="3"> Neutral</label>
+                <label><input type="radio" name="trans_reservation" value="4"> Agree</label>
+                <label><input type="radio" name="trans_reservation" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="trans_reservation" value="na"> N/A</label>
+            </div>
+
+            <label>Vehicles are clean and well-maintained</label>
+            <div class="radio-group">
+                <label><input type="radio" name="trans_condition" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="trans_condition" value="2"> Disagree</label>
+                <label><input type="radio" name="trans_condition" value="3"> Neutral</label>
+                <label><input type="radio" name="trans_condition" value="4"> Agree</label>
+                <label><input type="radio" name="trans_condition" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="trans_condition" value="na"> N/A</label>
+            </div>
+
+            <label>Parking services are adequate</label>
+            <div class="radio-group">
+                <label><input type="radio" name="trans_parking" value="1"> Strongly Disagree</label>
+                <label><input type="radio" name="trans_parking" value="2"> Disagree</label>
+                <label><input type="radio" name="trans_parking" value="3"> Neutral</label>
+                <label><input type="radio" name="trans_parking" value="4"> Agree</label>
+                <label><input type="radio" name="trans_parking" value="5"> Strongly Agree</label>
+                <label><input type="radio" name="trans_parking" value="na"> N/A</label>
+            </div>
+
+            <label>Additional comments for Transportation & Fleet Management</label>
+            <textarea name="trans_comments"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Overall Assessment</h2>
+
+            <label class="required">Overall, how satisfied are you with the Division of Business and Finance?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="overall_satisfaction" value="1" required> Very Dissatisfied</label>
+                <label><input type="radio" name="overall_satisfaction" value="2"> Dissatisfied</label>
+                <label><input type="radio" name="overall_satisfaction" value="3"> Neutral</label>
+                <label><input type="radio" name="overall_satisfaction" value="4"> Satisfied</label>
+                <label><input type="radio" name="overall_satisfaction" value="5"> Very Satisfied</label>
+            </div>
+
+            <label>Which department has provided you with the BEST service?</label>
+            <select name="best_department">
+                <option value="">-- Select department --</option>
+                <option value="auxiliary">Auxiliary Services</option>
+                <option value="business">Business Office</option>
+                <option value="facilities">Facilities Management</option>
+                <option value="financial">Financial Aid</option>
+                <option value="it">Information Technology</option>
+                <option value="risk">Risk Management</option>
+                <option value="student">Student Accounts</option>
+                <option value="transport">Transportation & Fleet Management</option>
+            </select>
+
+            <label>Which department has the MOST room for improvement?</label>
+            <select name="improvement_department">
+                <option value="">-- Select department --</option>
+                <option value="auxiliary">Auxiliary Services</option>
+                <option value="business">Business Office</option>
+                <option value="facilities">Facilities Management</option>
+                <option value="financial">Financial Aid</option>
+                <option value="it">Information Technology</option>
+                <option value="risk">Risk Management</option>
+                <option value="student">Student Accounts</option>
+                <option value="transport">Transportation & Fleet Management</option>
+            </select>
+
+            <label>What are the Division's greatest strengths?</label>
+            <textarea name="strengths"></textarea>
+
+            <label>What areas need the most improvement?</label>
+            <textarea name="improvements"></textarea>
+
+            <label>Do you have any suggestions for new services or process improvements?</label>
+            <textarea name="suggestions"></textarea>
+        </div>
+
+        <div class="section">
+            <h2>Contact Information (Optional)</h2>
+
+            <label>Name</label>
+            <input type="text" name="contact_name">
+
+            <label>Email Address</label>
+            <input type="email" name="contact_email">
+        </div>
+
+        <button type="submit">Submit Survey</button>
+    </form>
+
+    <script>
+        var form = document.getElementById('surveyForm');
+        var button = form.querySelector('button');
+
+        form.onsubmit = function(e) {
+            e.preventDefault();
+
+            button.textContent = 'Submitting...';
+            button.disabled = true;
+
+            var data = {};
+            var formData = new FormData(form);
+
+            formData.forEach(function(value, key) {
+                // Handle checkboxes - if key already exists, it's a checkbox group
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            // Convert arrays to comma-separated strings for Google Sheets
+            for (var key in data) {
+                if (Array.isArray(data[key])) {
+                    data[key] = data[key].join(', ');
+                }
+            }
+
+            data.timestamp = new Date().toISOString();
+
+            fetch('https://script.google.com/macros/s/AKfycbxG7CA40mQmruKQ65DJDO5SibuRXmDtgwrVihWMODAiyujVTk03HyOF3-gGuUhQ177OhA/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(function() {
+                alert('Thank you! Your survey has been submitted successfully.');
+                form.reset();
+                button.textContent = 'Submit Survey';
+                button.disabled = false;
+            })
+            .catch(function() {
+                alert('Error submitting survey. Please try again.');
+                button.textContent = 'Submit Survey';
+                button.disabled = false;
+            });
+        };
+    </script>
+</body>
+</html>
