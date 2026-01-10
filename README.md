@@ -7,6 +7,7 @@ Repository for Institutional Research and Institutional Effectiveness surveys de
 ### Active Surveys
 
 - [Business & Finance Fall 2025 Assessment Survey](./Business%20&%20Finance%20Fall%202025%20Assessment%20Survey/)
+- [LLC Partner Assessment Survey](./LLC%20Partner%20Assessment%20Survey/)
 
 ## About
 
