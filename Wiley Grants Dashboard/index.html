@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiley University Grants Database - Enhanced</title>
+    <style>
+        :root {
+            --primary: #4B0082;
+            --primary-light: #6B238E;
+            --secondary: #FFD700;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --bg: #f5f7fa;
+            --card-bg: white;
+            --text: #343a40;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --primary: #9370DB;
+            --primary-light: #BA55D3;
+            --bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text: #e4e4e4;
+            --border: #404040;
+            --light: #2a2a3e;
+            --dark: #e4e4e4;
+            --gray: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header h1 { font-size: 1.5rem; }
+        .header p { opacity: 0.9; font-size: 0.85rem; }
+
+        .header-controls { display: flex; gap: 10px; align-items: center; }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .container { max-width: 1800px; margin: 0 auto; padding: 15px; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab:hover { background: var(--light); }
+        .tab.active { background: var(--primary); color: white; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-card .number { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .stat-card .label { color: var(--gray); font-size: 0.75rem; margin-top: 3px; }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(135deg, var(--warning) 0%, #ff9800 100%);
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-banner.danger { background: linear-gradient(135deg, var(--danger) 0%, #c82333 100%); color: white; }
+        .alert-banner .alert-icon { font-size: 1.5rem; }
+
+        /* Cards/Panels */
+        .panel {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .panel-title { font-size: 1.1rem; font-weight: 600; }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-light); }
+        .btn-secondary { background: var(--border); color: var(--text); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: #333; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-info { background: var(--info); color: white; }
+
+        /* Forms */
+        input, select, textarea {
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: var(--card-bg);
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Search Box */
+        .search-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-row input { flex: 1; min-width: 200px; }
+
+        /* Filters */
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .filter-group select, .filter-group input { width: 100%; }
+
+        /* Table */
+        .table-container { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+        }
+
+        th:hover { background: var(--primary-light); }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:hover { background: var(--light); }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-highest { background: #d4edda; color: #155724; }
+        .badge-high { background: #cce5ff; color: #004085; }
+        .badge-medium-high { background: #fff3cd; color: #856404; }
+        .badge-medium { background: #e2e3e5; color: #383d41; }
+        .badge-low-medium, .badge-future { background: #f8d7da; color: #721c24; }
+
+        .badge-federal { background: #17a2b8; color: white; }
+        .badge-foundation { background: #6f42c1; color: white; }
+        .badge-corporate { background: #fd7e14; color: white; }
+        .badge-religious { background: #20c997; color: white; }
+        .badge-state { background: #6c757d; color: white; }
+
+        /* Pipeline Badges */
+        .pipeline-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .pipeline-identified { background: #e3f2fd; color: #1565c0; }
+        .pipeline-development { background: #fff3e0; color: #e65100; }
+        .pipeline-submitted { background: #f3e5f5; color: #7b1fa2; }
+        .pipeline-awarded { background: #e8f5e9; color: #2e7d32; }
+        .pipeline-declined { background: #ffebee; color: #c62828; }
+
+        /* Favorite Star */
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .star-btn.active { color: var(--secondary); }
+        .star-btn:hover { color: var(--secondary); }
+
+        /* Compare Checkbox */
+        .compare-check { width: 18px; height: 18px; cursor: pointer; }
+
+        /* Calendar */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .calendar-header {
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .calendar-day {
+            background: var(--light);
+            min-height: 80px;
+            padding: 5px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .calendar-day.other-month { opacity: 0.4; }
+        .calendar-day.today { background: #e8f5e9; border-color: var(--success); }
+
+        .calendar-day-number {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .calendar-event {
+            background: var(--primary);
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+            margin-bottom: 2px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-event.priority-highest { background: var(--success); }
+        .calendar-event.priority-high { background: var(--info); }
+        .calendar-event.priority-medium { background: var(--gray); }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Simple Bar Chart */
+        .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-label { width: 120px; font-size: 0.8rem; text-align: right; }
+
+        .bar-track {
+            flex: 1;
+            height: 20px;
+            background: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .bar-value { width: 40px; font-size: 0.8rem; font-weight: 600; }
+
+        /* Pie Chart (CSS-based) */
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+        }
+
+        .pie-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        /* Comparison Panel */
+        .compare-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            padding: 15px 20px;
+            display: none;
+            z-index: 100;
+        }
+
+        .compare-panel.show { display: block; }
+
+        .compare-items { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+        .compare-item {
+            background: var(--light);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .compare-item .remove {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: sticky;
+            top: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body { padding: 20px; }
+
+        .modal-section { margin-bottom: 20px; }
+
+        .modal-section h3 {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 5px;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .modal-item {
+            background: var(--light);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .modal-item label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+
+        .modal-item.full { grid-column: 1 / -1; }
+
+        /* Notes */
+        .notes-section textarea {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* History Log */
+        .history-list { max-height: 300px; overflow-y: auto; }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .history-item .time {
+            color: var(--gray);
+            font-size: 0.75rem;
+        }
+
+        /* Faculty Tags */
+        .faculty-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+
+        .faculty-tag {
+            background: var(--info);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .faculty-tag .remove {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.6rem;
+        }
+
+        /* Budget Calculator */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .calc-result {
+            background: var(--success);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .calc-result .amount { font-size: 1.5rem; font-weight: 700; }
+
+        /* Saved Filters */
+        .saved-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+
+        .saved-filter {
+            background: var(--light);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid transparent;
+        }
+
+        .saved-filter:hover { border-color: var(--primary); }
+
+        .saved-filter .delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            font-size: 0.6rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .page-btn:hover:not(:disabled) { background: var(--primary); color: white; }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-btn.active { background: var(--primary); color: white; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; text-align: center; }
+            .tabs { justify-content: center; }
+            .modal-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .tabs, .search-row, .filters-grid, .pagination, .compare-panel, .header-controls { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Wiley University Grants Database</h1>
+            <p>Office of Institutional Advancement and Grants | Enhanced Dashboard</p>
+        </div>
+        <div class="header-controls">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+            <button class="btn btn-secondary" onclick="exportAll()">📥 Export All</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Deadline Alerts -->
+        <div id="deadline-alerts"></div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="database">📊 Database</button>
+            <button class="tab" data-tab="calendar">📅 Calendar</button>
+            <button class="tab" data-tab="pipeline">🔄 Pipeline</button>
+            <button class="tab" data-tab="analytics">📈 Analytics</button>
+            <button class="tab" data-tab="calculator">🧮 Budget Calculator</button>
+            <button class="tab" data-tab="history">📜 History</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab-database" class="tab-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card"><div class="number" id="stat-total">0</div><div class="label">Total</div></div>
+                <div class="stat-card"><div class="number" id="stat-filtered">0</div><div class="label">Filtered</div></div>
+                <div class="stat-card"><div class="number" id="stat-favorites">0</div><div class="label">Favorites</div></div>
+                <div class="stat-card"><div class="number" id="stat-highest">0</div><div class="label">Highest Priority</div></div>
+                <div class="stat-card"><div class="number" id="stat-30days">0</div><div class="label">Due 30 Days</div></div>
+                <div class="stat-card"><div class="number" id="stat-pipeline">0</div><div class="label">In Pipeline</div></div>
+                <div class="stat-card"><div class="number" id="stat-maxfund">$0</div><div class="label">Max Funding</div></div>
+            </div>
+
+            <!-- Saved Filters -->
+            <div class="panel" id="saved-filters-panel" style="display:none;">
+                <div class="panel-header">
+                    <span class="panel-title">💾 Saved Filters</span>
+                </div>
+                <div class="saved-filters" id="saved-filters-list"></div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="panel">
+                <div class="search-row">
+                    <input type="text" id="search" placeholder="Search grants...">
+                    <button class="btn btn-primary" onclick="applyFilters()">🔍 Search</button>
+                    <button class="btn btn-secondary" onclick="resetFilters()">↺ Reset</button>
+                    <button class="btn btn-info" onclick="saveCurrentFilter()">💾 Save Filter</button>
+                    <button class="btn btn-warning" onclick="showFavoritesOnly()">⭐ Favorites</button>
+                </div>
+
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Funder Type</label>
+                        <select id="filter-type"><option value="">All Types</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Priority Area</label>
+                        <select id="filter-area"><option value="">All Areas</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Priority Level</label>
+                        <select id="filter-priority"><option value="">All Levels</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Min Award</label>
+                        <select id="filter-amount">
+                            <option value="">Any</option>
+                            <option value="25000">$25K+</option>
+                            <option value="50000">$50K+</option>
+                            <option value="100000">$100K+</option>
+                            <option value="250000">$250K+</option>
+                            <option value="500000">$500K+</option>
+                            <option value="1000000">$1M+</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="filter-status"><option value="">All</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Pipeline Stage</label>
+                        <select id="filter-pipeline">
+                            <option value="">All Stages</option>
+                            <option value="identified">Identified</option>
+                            <option value="development">In Development</option>
+                            <option value="submitted">Submitted</option>
+                            <option value="awarded">Awarded</option>
+                            <option value="declined">Declined</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Faculty Area</label>
+                        <select id="filter-faculty"><option value="">All Faculty</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Match Required</label>
+                        <select id="filter-match">
+                            <option value="">Any</option>
+                            <option value="No">No Match</option>
+                            <option value="Yes">Match Required</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="30">⭐</th>
+                                <th width="30">☑</th>
+                                <th data-sort="Funder_Name">Funder ↕</th>
+                                <th data-sort="Program_Name">Program ↕</th>
+                                <th data-sort="Funder_Type">Type ↕</th>
+                                <th data-sort="Award_Max">Max Award ↕</th>
+                                <th data-sort="Deadline_Typical">Deadline ↕</th>
+                                <th data-sort="Priority_Level">Priority ↕</th>
+                                <th>Pipeline</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <span id="page-info">Showing 0-0 of 0</span>
+                    <div>
+                        <button class="page-btn" onclick="changePage(-1)">« Prev</button>
+                        <span id="page-nums"></span>
+                        <button class="page-btn" onclick="changePage(1)">Next »</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Tab -->
+        <div id="tab-calendar" class="tab-content" style="display:none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <button class="btn btn-secondary" onclick="changeMonth(-1)">« Previous</button>
+                    <span class="panel-title" id="calendar-title">January 2026</span>
+                    <button class="btn btn-secondary" onclick="changeMonth(1)">Next »</button>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+        </div>
+
+        <!-- Pipeline Tab -->
+        <div id="tab-pipeline" class="tab-content" style="display:none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">🔄 Grant Pipeline Tracker</span>
+                    <button class="btn btn-success" onclick="exportPipeline()">Export Pipeline</button>
+                </div>
+                <div id="pipeline-board"></div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="tab-analytics" class="tab-content" style="display:none;">
+            <div class="charts-grid" id="charts-container"></div>
+        </div>
+
+        <!-- Budget Calculator Tab -->
+        <div id="tab-calculator" class="tab-content" style="display:none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">🧮 Grant Budget Calculator</span>
+                </div>
+                <div class="calc-grid">
+                    <div>
+                        <label>Direct Costs ($)</label>
+                        <input type="number" id="calc-direct" value="100000" onchange="calculateBudget()">
+                    </div>
+                    <div>
+                        <label>Indirect Cost Rate (%)</label>
+                        <input type="number" id="calc-idc" value="8" onchange="calculateBudget()">
+                    </div>
+                    <div>
+                        <label>Match Requirement (%)</label>
+                        <input type="number" id="calc-match" value="0" onchange="calculateBudget()">
+                    </div>
+                    <div>
+                        <label>Project Years</label>
+                        <input type="number" id="calc-years" value="3" onchange="calculateBudget()">
+                    </div>
+                </div>
+                <div style="margin-top:20px;">
+                    <div class="calc-grid">
+                        <div class="calc-result">
+                            <div class="label">Total Request</div>
+                            <div class="amount" id="calc-total">$108,000</div>
+                        </div>
+                        <div class="calc-result" style="background:var(--info)">
+                            <div class="label">Indirect Recovery</div>
+                            <div class="amount" id="calc-indirect">$8,000</div>
+                        </div>
+                        <div class="calc-result" style="background:var(--warning);color:#333">
+                            <div class="label">Required Match</div>
+                            <div class="amount" id="calc-matchamt">$0</div>
+                        </div>
+                        <div class="calc-result" style="background:var(--primary)">
+                            <div class="label">Multi-Year Total</div>
+                            <div class="amount" id="calc-multiyear">$324,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="tab-history" class="tab-content" style="display:none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">📜 Activity History</span>
+                    <button class="btn btn-danger btn-sm" onclick="clearHistory()">Clear History</button>
+                </div>
+                <div class="history-list" id="history-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Panel -->
+    <div class="compare-panel" id="compare-panel">
+        <div class="compare-items">
+            <strong>Compare:</strong>
+            <div id="compare-list"></div>
+            <button class="btn btn-primary" onclick="openCompareModal()">Compare Selected</button>
+            <button class="btn btn-secondary" onclick="clearCompare()">Clear</button>
+        </div>
+    </div>
+
+    <!-- Grant Detail Modal -->
+    <div class="modal-overlay" id="modal-detail">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-title">Grant Title</h2>
+                    <div id="modal-subtitle" style="opacity:0.9"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div class="modal-overlay" id="modal-compare">
+        <div class="modal" style="max-width:1200px">
+            <div class="modal-header">
+                <h2>Grant Comparison</h2>
+                <button class="modal-close" onclick="closeModal('modal-compare')">×</button>
+            </div>
+            <div class="modal-body" id="compare-body"></div>
+        </div>
+    </div>
+
+    <!-- Save Filter Modal -->
+    <div class="modal-overlay" id="modal-savefilter">
+        <div class="modal" style="max-width:400px">
+            <div class="modal-header">
+                <h2>Save Filter</h2>
+                <button class="modal-close" onclick="closeModal('modal-savefilter')">×</button>
+            </div>
+            <div class="modal-body">
+                <label>Filter Name</label>
+                <input type="text" id="filter-name" style="width:100%;margin-top:5px">
+                <button class="btn btn-primary" style="margin-top:15px;width:100%" onclick="confirmSaveFilter()">Save Filter</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// === DATA ===
+const grantsData = [
+{"ID":"F001","Funder_Name":"U.S. Department of Education","Program_Name":"Strengthening HBCUs (Title III-B)","Funder_Type":"Federal","CFDA_Number":"84.031B","Award_Min":250000,"Award_Max":1000000,"Project_Period_Years":"5","Deadline_Typical":"March-April","Match_Required":"No","Eligibility":"Accredited HBCUs","Purpose":"Planning, developing, or implementing activities to strengthen institutional management, academic programs, and student services","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"hbcu@ed.gov","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/historically-black-colleges-and-universities-hbcus","Relationship_Status":"Cold","Notes":"Annual submission recommended; core institutional support"},
+{"ID":"F002","Funder_Name":"U.S. Department of Education","Program_Name":"Strengthening HBCU Masters Programs","Funder_Type":"Federal","CFDA_Number":"84.382B","Award_Min":250000,"Award_Max":750000,"Project_Period_Years":"5","Deadline_Typical":"April-May","Match_Required":"No","Eligibility":"HBCUs offering master's degrees","Purpose":"Expand and enhance graduate education at HBCUs","Priority_Area":"Institutional Capacity","Priority_Level":"FUTURE","Contact_Email":"hbcu@ed.gov","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/historically-black-colleges-and-universities-hbcus","Relationship_Status":"Cold","Notes":"Available if Wiley develops graduate programs"},
+{"ID":"F003","Funder_Name":"U.S. Department of Education","Program_Name":"HBCU Capital Financing Program","Funder_Type":"Federal","CFDA_Number":"84.031D","Award_Min":500000,"Award_Max":30000000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Accredited HBCUs","Purpose":"Finance capital projects including repair, renovation, and construction","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"hbcucp@ed.gov","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/hbcu-capital-financing-program","Relationship_Status":"Cold","Notes":"Below-market interest rate loans for facilities"},
+{"ID":"F004","Funder_Name":"U.S. Department of Education","Program_Name":"Student Support Services (TRIO)","Funder_Type":"Federal","CFDA_Number":"84.042A","Award_Min":220000,"Award_Max":350000,"Project_Period_Years":"5","Deadline_Typical":"January (5-yr cycle)","Match_Required":"No","Eligibility":"IHEs serving low-income, first-generation, disabled students","Purpose":"Increase retention and graduation rates","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/trio-student-support-services","Relationship_Status":"Cold","Notes":"Strong fit for Wiley's student population"},
+{"ID":"F005","Funder_Name":"U.S. Department of Education","Program_Name":"Upward Bound (TRIO)","Funder_Type":"Federal","CFDA_Number":"84.047A","Award_Min":250000,"Award_Max":400000,"Project_Period_Years":"5","Deadline_Typical":"January (5-yr cycle)","Match_Required":"No","Eligibility":"IHEs with K-12 partnerships","Purpose":"Generate skills and motivation for college success among high school students","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/trio-upward-bound","Relationship_Status":"Cold","Notes":"Requires K-12 partnerships in service area"},
+{"ID":"F006","Funder_Name":"U.S. Department of Education","Program_Name":"Upward Bound Math-Science (TRIO)","Funder_Type":"Federal","CFDA_Number":"84.047M","Award_Min":250000,"Award_Max":400000,"Project_Period_Years":"5","Deadline_Typical":"January (5-yr cycle)","Match_Required":"No","Eligibility":"IHEs with K-12 partnerships","Purpose":"STEM preparation for underrepresented students","Priority_Area":"STEM Education","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/trio-upward-bound-math-science","Relationship_Status":"Cold","Notes":"Aligns with STEM priorities"},
+{"ID":"F007","Funder_Name":"U.S. Department of Education","Program_Name":"Ronald E. McNair Program (TRIO)","Funder_Type":"Federal","CFDA_Number":"84.217A","Award_Min":220000,"Award_Max":330000,"Project_Period_Years":"5","Deadline_Typical":"January (5-yr cycle)","Match_Required":"No","Eligibility":"IHEs preparing students for doctoral study","Purpose":"Prepare undergraduates for doctoral study","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/trio-mcnair","Relationship_Status":"Cold","Notes":"Good for faculty research development"},
+{"ID":"F008","Funder_Name":"U.S. Department of Education","Program_Name":"Teacher Quality Partnership Grants","Funder_Type":"Federal","CFDA_Number":"84.336S","Award_Min":250000,"Award_Max":1000000,"Project_Period_Years":"5","Deadline_Typical":"February-March","Match_Required":"Yes (100% Yr 4-5)","Eligibility":"IHEs with high-need LEA partnerships","Purpose":"Improve quality of new teachers in high-need fields","Priority_Area":"Teacher Preparation","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/teacher-quality-partnership","Relationship_Status":"Cold","Notes":"Requires high-need LEA partnership"},
+{"ID":"F009","Funder_Name":"U.S. Department of Education","Program_Name":"Augustus F. Hawkins Centers of Excellence","Funder_Type":"Federal","CFDA_Number":"84.418A","Award_Min":500000,"Award_Max":1500000,"Project_Period_Years":"5","Deadline_Typical":"Spring","Match_Required":"No","Eligibility":"MSIs, HBCUs, TCUs with teacher prep programs","Purpose":"Strengthen teacher preparation at MSIs","Priority_Area":"Teacher Preparation","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/augustus-f-hawkins-centers-excellence","Relationship_Status":"Cold","Notes":"Directly targets HBCUs with education programs"},
+{"ID":"F010","Funder_Name":"U.S. Department of Education","Program_Name":"MSEIP","Funder_Type":"Federal","CFDA_Number":"84.120A","Award_Min":200000,"Award_Max":750000,"Project_Period_Years":"3","Deadline_Typical":"March","Match_Required":"No","Eligibility":"MSIs, HBCUs","Purpose":"Improve STEM education quality at minority-serving institutions","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/mseip","Relationship_Status":"Cold","Notes":"Foundational STEM program for institutional improvement"},
+{"ID":"F011","Funder_Name":"U.S. Department of Education","Program_Name":"GAANN Fellowships","Funder_Type":"Federal","CFDA_Number":"84.200","Award_Min":100000,"Award_Max":500000,"Project_Period_Years":"3","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"IHEs with graduate programs","Purpose":"Support graduate fellowships in critical fields","Priority_Area":"Student Success","Priority_Level":"FUTURE","Contact_Email":"","Website":"https://www.ed.gov/grants-and-programs/grants-higher-education/gaann","Relationship_Status":"Cold","Notes":"Requires graduate programs"},
+{"ID":"F012","Funder_Name":"National Science Foundation","Program_Name":"HBCU-UP Targeted Infusion Projects","Funder_Type":"Federal","CFDA_Number":"NSF 24-586","Award_Min":100000,"Award_Max":500000,"Project_Period_Years":"3","Deadline_Typical":"Fall","Match_Required":"No","Eligibility":"Accredited HBCUs","Purpose":"Improve specific STEM courses or programs","Priority_Area":"STEM Education","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=5481","Relationship_Status":"Cold","Notes":"Submit in Year 1; entry-level HBCU-UP track"},
+{"ID":"F013","Funder_Name":"National Science Foundation","Program_Name":"HBCU-UP Implementation Projects","Funder_Type":"Federal","CFDA_Number":"NSF 24-586","Award_Min":500000,"Award_Max":2500000,"Project_Period_Years":"5","Deadline_Typical":"Fall","Match_Required":"No","Eligibility":"Accredited HBCUs","Purpose":"Comprehensive institutional STEM transformation","Priority_Area":"STEM Education","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=5481","Relationship_Status":"Cold","Notes":"Submit in Year 3 after TIP success"},
+{"ID":"F014","Funder_Name":"National Science Foundation","Program_Name":"HBCU-UP Research Centers","Funder_Type":"Federal","CFDA_Number":"NSF 24-586","Award_Min":2000000,"Award_Max":10000000,"Project_Period_Years":"5","Deadline_Typical":"Fall","Match_Required":"No","Eligibility":"HBCUs (consortium)","Purpose":"Multi-institutional STEM research centers","Priority_Area":"STEM Education","Priority_Level":"FUTURE","Contact_Email":"","Website":"https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=5481","Relationship_Status":"Cold","Notes":"Long-term goal; requires research capacity"},
+{"ID":"F015","Funder_Name":"National Science Foundation","Program_Name":"Louis Stokes Alliances (LSAMP)","Funder_Type":"Federal","CFDA_Number":"","Award_Min":400000,"Award_Max":750000,"Project_Period_Years":"5","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"LSAMP alliance members","Purpose":"Increase STEM baccalaureate degrees for underrepresented students","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=13646","Relationship_Status":"Cold","Notes":"Seek to join Texas LSAMP alliance"},
+{"ID":"F016","Funder_Name":"National Science Foundation","Program_Name":"IUSE: EHR","Funder_Type":"Federal","CFDA_Number":"","Award_Min":50000,"Award_Max":3000000,"Project_Period_Years":"3-5","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"All IHEs","Purpose":"Enhance STEM teaching and learning in undergraduate education","Priority_Area":"STEM Education","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=505082","Relationship_Status":"Cold","Notes":"Competitive but valuable for STEM innovation"},
+{"ID":"F017","Funder_Name":"National Science Foundation","Program_Name":"Robert Noyce Teacher Scholarship","Funder_Type":"Federal","CFDA_Number":"","Award_Min":75000,"Award_Max":3000000,"Project_Period_Years":"5","Deadline_Typical":"August","Match_Required":"No","Eligibility":"IHEs with STEM teacher prep","Purpose":"STEM teacher preparation and scholarships","Priority_Area":"Teacher Preparation","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.nsf.gov/funding/opportunities/robert-noyce-teacher-scholarship-program","Relationship_Status":"Cold","Notes":"Aligns with education programs"},
+{"ID":"F018","Funder_Name":"National Science Foundation","Program_Name":"S-STEM Scholarships","Funder_Type":"Federal","CFDA_Number":"","Award_Min":100000,"Award_Max":2500000,"Project_Period_Years":"5","Deadline_Typical":"March","Match_Required":"No","Eligibility":"All IHEs","Purpose":"Financial support and academic enhancement for STEM students","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=5257","Relationship_Status":"Cold","Notes":"Direct student scholarship support"},
+{"ID":"F019","Funder_Name":"National Institutes of Health","Program_Name":"RIMI (Research Infrastructure)","Funder_Type":"Federal","CFDA_Number":"","Award_Min":500000,"Award_Max":1500000,"Project_Period_Years":"5","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"HBCUs with limited NIH history","Purpose":"Build research capacity at minority-serving institutions","Priority_Area":"STEM Education","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.nigms.nih.gov/","Relationship_Status":"Cold","Notes":"Requires research infrastructure development"},
+{"ID":"F020","Funder_Name":"National Institutes of Health","Program_Name":"REAP (R15)","Funder_Type":"Federal","CFDA_Number":"","Award_Min":50000,"Award_Max":300000,"Project_Period_Years":"3","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"Support small-scale research projects","Priority_Area":"STEM Education","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://grants.nih.gov/grants/funding/r15.htm","Relationship_Status":"Cold","Notes":"Good for individual faculty research"},
+{"ID":"F021","Funder_Name":"National Institutes of Health","Program_Name":"MARC U-STAR","Funder_Type":"Federal","CFDA_Number":"","Award_Min":100000,"Award_Max":500000,"Project_Period_Years":"5","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"IHEs with research programs","Purpose":"Undergraduate research training in biomedical sciences","Priority_Area":"STEM Education","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.nigms.nih.gov/training/marc","Relationship_Status":"Cold","Notes":"Pipeline program for graduate school"},
+{"ID":"F022","Funder_Name":"USDA NIFA","Program_Name":"1890 Capacity Building Grants","Funder_Type":"Federal","CFDA_Number":"","Award_Min":150000,"Award_Max":500000,"Project_Period_Years":"3","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"1890 Land-Grants and partners","Purpose":"Strengthen teaching, research, and extension","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.nifa.usda.gov/grants/funding-opportunities","Relationship_Status":"Cold","Notes":"Partner with Prairie View A&M"},
+{"ID":"F023","Funder_Name":"USDA NIFA","Program_Name":"1890 National Scholars Program","Funder_Type":"Federal","CFDA_Number":"","Award_Min":20000,"Award_Max":50000,"Project_Period_Years":"4","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"Students at eligible institutions","Purpose":"Full scholarships for agriculture students","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.nifa.usda.gov/grants/funding-opportunities","Relationship_Status":"Cold","Notes":"Student recruitment tool"},
+{"ID":"F024","Funder_Name":"USDA NIFA","Program_Name":"SARE Grants","Funder_Type":"Federal","CFDA_Number":"","Award_Min":15000,"Award_Max":250000,"Project_Period_Years":"3","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"All eligible applicants","Purpose":"Sustainable agriculture education and research","Priority_Area":"STEM Education","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.sare.org/grants/","Relationship_Status":"Cold","Notes":"Rural East Texas agricultural focus"},
+{"ID":"F025","Funder_Name":"USDA Rural Development","Program_Name":"Community Facilities Grants","Funder_Type":"Federal","CFDA_Number":"","Award_Min":25000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"Varies","Eligibility":"Rural communities under 20000","Purpose":"Develop essential community facilities","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.rd.usda.gov/programs-services/community-facilities","Relationship_Status":"Cold","Notes":"Marshall qualifies as rural"},
+{"ID":"F026","Funder_Name":"USDA Rural Development","Program_Name":"Distance Learning & Telemedicine","Funder_Type":"Federal","CFDA_Number":"","Award_Min":50000,"Award_Max":1000000,"Project_Period_Years":"3","Deadline_Typical":"Annual","Match_Required":"Yes","Eligibility":"Rural communities","Purpose":"Technology infrastructure for rural education","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.rd.usda.gov/programs-services/distance-learning-telemedicine-grants","Relationship_Status":"Cold","Notes":"Technology enhancement opportunity"},
+{"ID":"F027","Funder_Name":"AmeriCorps","Program_Name":"State and National Grants","Funder_Type":"Federal","CFDA_Number":"","Award_Min":200000,"Award_Max":1000000,"Project_Period_Years":"3","Deadline_Typical":"October","Match_Required":"No","Eligibility":"Nonprofits and IHEs","Purpose":"Support national service programs","Priority_Area":"Community Health","Priority_Level":"HIGH","Contact_Email":"","Website":"https://americorps.gov/funding-opportunity","Relationship_Status":"Cold","Notes":"Apply through OneStar Foundation (Texas)"},
+{"ID":"F028","Funder_Name":"AmeriCorps","Program_Name":"VISTA Program","Funder_Type":"Federal","CFDA_Number":"","Award_Min":0,"Award_Max":0,"Project_Period_Years":"1","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits and IHEs","Purpose":"Anti-poverty capacity building through volunteers","Priority_Area":"Community Health","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://americorps.gov/serve/fit-finder/americorps-vista","Relationship_Status":"Cold","Notes":"Low-cost capacity addition; no direct funding"},
+{"ID":"F029","Funder_Name":"SAMHSA","Program_Name":"Campus Suicide Prevention","Funder_Type":"Federal","CFDA_Number":"","Award_Min":102000,"Award_Max":306000,"Project_Period_Years":"3","Deadline_Typical":"Annual","Match_Required":"No","Eligibility":"IHEs","Purpose":"Develop campus mental health services","Priority_Area":"Community Health","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.samhsa.gov/grants","Relationship_Status":"Cold","Notes":"Student wellness focus"},
+{"ID":"F030","Funder_Name":"HRSA","Program_Name":"Health Careers Opportunity Program","Funder_Type":"Federal","CFDA_Number":"","Award_Min":400000,"Award_Max":800000,"Project_Period_Years":"3","Deadline_Typical":"Annual","Match_Required":"No","Eligibility":"IHEs with health programs","Purpose":"Health professions pipeline for underrepresented students","Priority_Area":"Community Health","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.hrsa.gov/grants/find-funding","Relationship_Status":"Cold","Notes":"Pre-health program support"},
+{"ID":"F031","Funder_Name":"National Endowment for Humanities","Program_Name":"Humanities Connections","Funder_Type":"Federal","CFDA_Number":"","Award_Min":25000,"Award_Max":150000,"Project_Period_Years":"3","Deadline_Typical":"Annual","Match_Required":"No","Eligibility":"All IHEs","Purpose":"Integrate humanities into undergraduate curricula","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.neh.gov/grants","Relationship_Status":"Cold","Notes":"Liberal arts enhancement"},
+{"ID":"F032","Funder_Name":"National Endowment for Arts","Program_Name":"Grants for Arts Projects","Funder_Type":"Federal","CFDA_Number":"","Award_Min":10000,"Award_Max":100000,"Project_Period_Years":"1-2","Deadline_Typical":"Annual","Match_Required":"Yes","Eligibility":"Nonprofits and IHEs","Purpose":"Support arts programming and education","Priority_Area":"Institutional Capacity","Priority_Level":"LOW-MEDIUM","Contact_Email":"","Website":"https://www.arts.gov/grants","Relationship_Status":"Cold","Notes":"Arts programming support"},
+{"ID":"FN001","Funder_Name":"Lilly Endowment Inc.","Program_Name":"Various Programs","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":2000000,"Project_Period_Years":"Varies","Deadline_Typical":"By invitation","Match_Required":"Varies","Eligibility":"Religious, educational institutions","Purpose":"Religion, education, community development","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://lillyendowment.org/","Relationship_Status":"Cold","Notes":"Methodist connection + HBCU focus; LOI accepted"},
+{"ID":"FN002","Funder_Name":"Andrew W. Mellon Foundation","Program_Name":"Higher Learning Program","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":5000000,"Project_Period_Years":"Varies","Deadline_Typical":"By invitation","Match_Required":"No","Eligibility":"HBCUs and other IHEs","Purpose":"Higher education, arts, humanities strengthening","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://mellon.org/","Relationship_Status":"Cold","Notes":"Strong HBCU commitment; primarily invitation-only"},
+{"ID":"FN003","Funder_Name":"The Kresge Foundation","Program_Name":"Education Program","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"LOI","Match_Required":"No","Eligibility":"HBCUs, MSIs, educational institutions","Purpose":"Education, health, human services capacity","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://kresge.org/","Relationship_Status":"Cold","Notes":"Significant HBCU investment history"},
+{"ID":"FN004","Funder_Name":"Michael & Susan Dell Foundation","Program_Name":"Education Programs","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":50000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"No","Eligibility":"Texas educational institutions","Purpose":"Higher education completion, student support","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.dell.org/","Relationship_Status":"Cold","Notes":"Texas-based with education priority"},
+{"ID":"FN005","Funder_Name":"The Moody Foundation","Program_Name":"Education Grants","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":25000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"Varies","Eligibility":"Texas nonprofits and institutions","Purpose":"Education, health, social services","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://moodyf.org/","Relationship_Status":"Cold","Notes":"Texas-only focus; education priority"},
+{"ID":"FN006","Funder_Name":"Houston Endowment Inc.","Program_Name":"Education Program","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":50000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"LOI","Match_Required":"No","Eligibility":"Greater Houston and Texas organizations","Purpose":"Education, arts, environment, health","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.houstonendowment.org/","Relationship_Status":"Cold","Notes":"Texas education focus"},
+{"ID":"FN007","Funder_Name":"Lumina Foundation","Program_Name":"Higher Education","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":2000000,"Project_Period_Years":"Varies","Deadline_Typical":"By invitation","Match_Required":"No","Eligibility":"IHEs focused on completion","Purpose":"Higher education attainment and completion","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.luminafoundation.org/","Relationship_Status":"Cold","Notes":"Strong MSI focus; completion agenda"},
+{"ID":"FN008","Funder_Name":"Bill & Melinda Gates Foundation","Program_Name":"Postsecondary Success","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":5000000,"Project_Period_Years":"Varies","Deadline_Typical":"By invitation","Match_Required":"No","Eligibility":"IHEs and education organizations","Purpose":"Student completion and success","Priority_Area":"Student Success","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.gatesfoundation.org/","Relationship_Status":"Cold","Notes":"Large but competitive; significant HBCU history"},
+{"ID":"FN009","Funder_Name":"United Negro College Fund","Program_Name":"Various HBCU Programs","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":50000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"Member access","Match_Required":"No","Eligibility":"UNCF member institutions","Purpose":"Career pathways, STEM, faculty development, capacity","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://uncf.org/","Relationship_Status":"Engaged","Notes":"Wiley is UNCF member; access member benefits"},
+{"ID":"FN010","Funder_Name":"Fund II Foundation","Program_Name":"HBCU Programs","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"By invitation","Match_Required":"No","Eligibility":"HBCUs","Purpose":"HBCU support, Black wealth building","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"","Relationship_Status":"Cold","Notes":"Robert F. Smith foundation; active HBCU supporter"},
+{"ID":"FN011","Funder_Name":"Bloomberg Philanthropies","Program_Name":"Greenwood Initiative","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":500000,"Award_Max":5000000,"Project_Period_Years":"Varies","Deadline_Typical":"RFP/Invitation","Match_Required":"No","Eligibility":"HBCUs","Purpose":"Education, environment, public health","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.bloomberg.org/","Relationship_Status":"Cold","Notes":"$100M HBCU commitment announced"},
+{"ID":"FN012","Funder_Name":"ECMC Foundation","Program_Name":"Postsecondary Programs","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":50000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"No","Eligibility":"IHEs and education nonprofits","Purpose":"Postsecondary education, career readiness","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.ecmcfoundation.org/","Relationship_Status":"Cold","Notes":"Strong focus on completion and career outcomes"},
+{"ID":"FN013","Funder_Name":"Ascendium Education Group","Program_Name":"Education Grants","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":50000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"No","Eligibility":"IHEs serving low-income students","Purpose":"Postsecondary education for low-income students","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.ascendiumphilanthropy.org/","Relationship_Status":"Cold","Notes":"Formerly Great Lakes Higher Education"},
+{"ID":"FN014","Funder_Name":"Strada Education Network","Program_Name":"Career Pathways","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":100000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"By invitation","Match_Required":"No","Eligibility":"IHEs and workforce organizations","Purpose":"Education-employment pathways","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.strada.org/","Relationship_Status":"Cold","Notes":"Workforce alignment focus"},
+{"ID":"FN015","Funder_Name":"Council of Independent Colleges","Program_Name":"Various Programs","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":5000,"Award_Max":50000,"Project_Period_Years":"Varies","Deadline_Typical":"Member","Match_Required":"No","Eligibility":"CIC member institutions","Purpose":"Faculty development, consortium grants","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.cic.edu/","Relationship_Status":"Cold","Notes":"Member benefits available"},
+{"ID":"FN016","Funder_Name":"Jack Kent Cooke Foundation","Program_Name":"Scholarships","Funder_Type":"Foundation","CFDA_Number":"","Award_Min":5000,"Award_Max":50000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"No","Eligibility":"IHEs, high-achieving low-income students","Purpose":"Transfer scholarships, graduate scholarships","Priority_Area":"Student Success","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.jkcf.org/","Relationship_Status":"Cold","Notes":"Student scholarship focus"},
+{"ID":"FC001","Funder_Name":"Google.org","Program_Name":"CS Education Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":50000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"Computer science education and digital skills","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.google.org/","Relationship_Status":"Cold","Notes":"Strong CS/IT program alignment"},
+{"ID":"FC002","Funder_Name":"Microsoft Philanthropies","Program_Name":"TEALS Program","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"Digital skills, STEM education","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://nonprofit.microsoft.com/","Relationship_Status":"Cold","Notes":"Computer science education focus"},
+{"ID":"FC003","Funder_Name":"Apple Community Investment","Program_Name":"Education Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":50000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"STEM education, coding, creativity","Priority_Area":"STEM Education","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.apple.com/","Relationship_Status":"Cold","Notes":"Community education initiatives"},
+{"ID":"FC004","Funder_Name":"Dell Technologies Giving","Program_Name":"Education Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Texas educational institutions","Purpose":"Education, technology access","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.dell.com/","Relationship_Status":"Cold","Notes":"Texas-based company"},
+{"ID":"FC005","Funder_Name":"Cisco Foundation","Program_Name":"Networking Academy","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":50000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"Technology education, workforce development","Priority_Area":"STEM Education","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.cisco.com/c/en/us/about/csr.html","Relationship_Status":"Cold","Notes":"Networking Academy partnership opportunity"},
+{"ID":"FC006","Funder_Name":"Bank of America Foundation","Program_Name":"Workforce Development","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Workforce development, education","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://about.bankofamerica.com/en/making-an-impact/charitable-foundation-funding","Relationship_Status":"Cold","Notes":"Significant HBCU partnership history"},
+{"ID":"FC007","Funder_Name":"Wells Fargo Foundation","Program_Name":"Education Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Financial education, housing, small business","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.wellsfargo.com/about/corporate-responsibility/community-giving/","Relationship_Status":"Cold","Notes":"HBCU scholarship and capacity programs"},
+{"ID":"FC008","Funder_Name":"JPMorgan Chase Foundation","Program_Name":"Workforce Readiness","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":100000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Workforce readiness, financial capability","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.jpmorganchase.com/impact","Relationship_Status":"Cold","Notes":"Significant HBCU commitments"},
+{"ID":"FC009","Funder_Name":"Capital One Foundation","Program_Name":"Financial Literacy","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Financial literacy, workforce development","Priority_Area":"Student Success","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.capitalone.com/about/corporate-citizenship/","Relationship_Status":"Cold","Notes":"Dallas/Texas presence"},
+{"ID":"FC010","Funder_Name":"ExxonMobil Foundation","Program_Name":"STEM Education","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":50000,"Award_Max":1000000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"STEM education, women in STEM","Priority_Area":"STEM Education","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://corporate.exxonmobil.com/community/stem","Relationship_Status":"Cold","Notes":"Texas-based (Houston); strong STEM alignment"},
+{"ID":"FC011","Funder_Name":"Chevron Corporation","Program_Name":"STEM Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":50000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"STEM education, workforce development","Priority_Area":"STEM Education","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.chevron.com/sustainability/social","Relationship_Status":"Cold","Notes":"Energy sector STEM focus"},
+{"ID":"FC012","Funder_Name":"ConocoPhillips","Program_Name":"Education Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"STEM, environmental education","Priority_Area":"STEM Education","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.conocophillips.com/sustainability/","Relationship_Status":"Cold","Notes":"Houston-based energy company"},
+{"ID":"FC013","Funder_Name":"Halliburton Foundation","Program_Name":"Engineering Education","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":10000,"Award_Max":100000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Educational institutions","Purpose":"Engineering, STEM education","Priority_Area":"STEM Education","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.halliburton.com/","Relationship_Status":"Cold","Notes":"Houston-based; engineering focus"},
+{"ID":"FC014","Funder_Name":"Southwestern Energy","Program_Name":"Community Grants","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":10000,"Award_Max":100000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"East Texas communities","Purpose":"Education, community development","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.expandenergy.com/","Relationship_Status":"Cold","Notes":"East Texas operations near Marshall"},
+{"ID":"FC015","Funder_Name":"CHRISTUS Health Foundation","Program_Name":"Health Professions","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":10000,"Award_Max":100000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"East Texas institutions","Purpose":"Health professions, community health","Priority_Area":"Community Health","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.christushealth.org/","Relationship_Status":"Cold","Notes":"Local healthcare partner in East Texas"},
+{"ID":"FC016","Funder_Name":"Blue Cross Blue Shield of Texas","Program_Name":"Health Education","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Texas institutions","Purpose":"Health, education, community","Priority_Area":"Community Health","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.bcbstx.com/company-info/community-involvement","Relationship_Status":"Cold","Notes":"Texas health focus"},
+{"ID":"FC017","Funder_Name":"Walmart Foundation","Program_Name":"Workforce Development","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Workforce development, opportunity","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://walmart.org/","Relationship_Status":"Cold","Notes":"HBCU-specific initiatives available"},
+{"ID":"FC018","Funder_Name":"Target Foundation","Program_Name":"Education Equity","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":200000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Education equity initiatives","Priority_Area":"Student Success","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://corporate.target.com/sustainability-governance/community-engagement","Relationship_Status":"Cold","Notes":"Education equity focus"},
+{"ID":"FC019","Funder_Name":"Home Depot Foundation","Program_Name":"Skilled Trades","Funder_Type":"Corporate","CFDA_Number":"","Award_Min":25000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Nonprofits, IHEs","Purpose":"Veteran programs, skilled trades","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://corporate.homedepot.com/foundation","Relationship_Status":"Cold","Notes":"Workforce/trades alignment"},
+{"ID":"FT001","Funder_Name":"Meadows Foundation","Program_Name":"Education Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":25000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"Varies","Eligibility":"Texas nonprofits and institutions","Purpose":"Education, arts, civic, health","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://www.mfi.org/","Relationship_Status":"Cold","Notes":"Major Texas education funder"},
+{"ID":"FT002","Funder_Name":"Sid W. Richardson Foundation","Program_Name":"Education/Health","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":10000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"LOI","Match_Required":"Varies","Eligibility":"Texas organizations","Purpose":"Education, health, human services","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.sidrichardson.org/","Relationship_Status":"Cold","Notes":"Texas-only focus"},
+{"ID":"FT003","Funder_Name":"T.L.L. Temple Foundation","Program_Name":"East Texas Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":10000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"LOI","Match_Required":"Varies","Eligibility":"East Texas organizations","Purpose":"Education, health, human services","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://www.tlltemplefoundation.org/","Relationship_Status":"Cold","Notes":"East Texas priority - near Marshall"},
+{"ID":"FT004","Funder_Name":"Ewing Halsell Foundation","Program_Name":"Education Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":25000,"Award_Max":250000,"Project_Period_Years":"Varies","Deadline_Typical":"LOI","Match_Required":"Varies","Eligibility":"Texas organizations","Purpose":"Education, human welfare","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"","Relationship_Status":"Cold","Notes":"Texas education focus"},
+{"ID":"FT005","Funder_Name":"Communities Foundation of Texas","Program_Name":"Community Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":10000,"Award_Max":100000,"Project_Period_Years":"Varies","Deadline_Typical":"Online","Match_Required":"Varies","Eligibility":"North Texas organizations","Purpose":"Education, community development","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"https://www.cftexas.org/","Relationship_Status":"Cold","Notes":"Dallas-area community foundation"},
+{"ID":"FT006","Funder_Name":"East Texas Communities Foundation","Program_Name":"Local Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":1000,"Award_Max":25000,"Project_Period_Years":"1","Deadline_Typical":"Online","Match_Required":"No","Eligibility":"East Texas organizations","Purpose":"Community grants in East Texas region","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.etcf.org/","Relationship_Status":"Cold","Notes":"Includes Harrison County - local funder"},
+{"ID":"FT007","Funder_Name":"Harrison County Community Foundation","Program_Name":"Local Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":1000,"Award_Max":10000,"Project_Period_Years":"1","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"Harrison County organizations","Purpose":"Local community support","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM","Contact_Email":"","Website":"","Relationship_Status":"Cold","Notes":"Small but hyperlocal to Marshall"},
+{"ID":"FT008","Funder_Name":"George and Fay Young Foundation","Program_Name":"Education","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":5000,"Award_Max":50000,"Project_Period_Years":"Varies","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"Texas educational institutions","Purpose":"Education in Texas","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM-HIGH","Contact_Email":"","Website":"","Relationship_Status":"Cold","Notes":"Texas education support"},
+{"ID":"FT009","Funder_Name":"Tocker Foundation","Program_Name":"Library Grants","Funder_Type":"Foundation (TX)","CFDA_Number":"","Award_Min":3000,"Award_Max":20000,"Project_Period_Years":"1","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Rural Texas libraries","Purpose":"Libraries in rural Texas communities under 12000","Priority_Area":"Institutional Capacity","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://tocker.org/","Relationship_Status":"Cold","Notes":"Library enhancement opportunity"},
+{"ID":"FR001","Funder_Name":"GBHEM United Methodist","Program_Name":"Ethnic Minority Scholarships","Funder_Type":"Religious","CFDA_Number":"","Award_Min":5000,"Award_Max":100000,"Project_Period_Years":"Varies","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"UMC-affiliated institutions","Purpose":"Scholarships, faculty development","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"https://www.gbhem.org/","Relationship_Status":"Engaged","Notes":"Wiley's denominational connection"},
+{"ID":"FR002","Funder_Name":"United Methodist Foundation of Louisiana","Program_Name":"UMC Grants","Funder_Type":"Religious","CFDA_Number":"","Award_Min":5000,"Award_Max":50000,"Project_Period_Years":"Varies","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"UMC-affiliated institutions","Purpose":"Support for UMC institutions","Priority_Area":"Institutional Capacity","Priority_Level":"HIGH","Contact_Email":"","Website":"","Relationship_Status":"Cold","Notes":"Adjacent conference; geographic proximity"},
+{"ID":"FR003","Funder_Name":"North Texas Conference Foundation","Program_Name":"Conference Grants","Funder_Type":"Religious","CFDA_Number":"","Award_Min":5000,"Award_Max":25000,"Project_Period_Years":"Varies","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"North Texas Conference institutions","Purpose":"Support for conference institutions","Priority_Area":"Institutional Capacity","Priority_Level":"HIGHEST","Contact_Email":"","Website":"","Relationship_Status":"Warm","Notes":"Wiley's home conference"},
+{"ID":"ST001","Funder_Name":"Texas Higher Education Coordinating Board","Program_Name":"TEOG","Funder_Type":"State","CFDA_Number":"","Award_Min":0,"Award_Max":0,"Project_Period_Years":"Annual","Deadline_Typical":"Annual","Match_Required":"No","Eligibility":"Texas public and private IHEs","Purpose":"State student financial aid","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.highered.texas.gov/","Relationship_Status":"Engaged","Notes":"Institutional allocation program"},
+{"ID":"ST002","Funder_Name":"Texas Higher Education Coordinating Board","Program_Name":"Work-Study","Funder_Type":"State","CFDA_Number":"","Award_Min":0,"Award_Max":0,"Project_Period_Years":"Annual","Deadline_Typical":"Annual","Match_Required":"No","Eligibility":"Texas IHEs","Purpose":"State-funded student employment","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.highered.texas.gov/","Relationship_Status":"Engaged","Notes":"State work-study allocation"},
+{"ID":"ST003","Funder_Name":"Texas Workforce Commission","Program_Name":"Skills Development Fund","Funder_Type":"State","CFDA_Number":"","Award_Min":50000,"Award_Max":500000,"Project_Period_Years":"Varies","Deadline_Typical":"Quarterly","Match_Required":"No","Eligibility":"Texas IHEs with business partners","Purpose":"Training for new and existing workers","Priority_Area":"Student Success","Priority_Level":"HIGH","Contact_Email":"","Website":"https://www.twc.texas.gov/programs/skills-development-fund","Relationship_Status":"Cold","Notes":"Requires business/industry partner"},
+{"ID":"ST004","Funder_Name":"Texas Workforce Commission","Program_Name":"Apprenticeship Program","Funder_Type":"State","CFDA_Number":"","Award_Min":25000,"Award_Max":100000,"Project_Period_Years":"Varies","Deadline_Typical":"Rolling","Match_Required":"No","Eligibility":"Registered apprenticeship sponsors","Purpose":"Support registered apprenticeships","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.twc.texas.gov/","Relationship_Status":"Cold","Notes":"Emerging workforce opportunity"},
+{"ID":"ST005","Funder_Name":"Ark-Tex Council of Governments","Program_Name":"Regional Programs","Funder_Type":"Regional","CFDA_Number":"","Award_Min":10000,"Award_Max":50000,"Project_Period_Years":"Varies","Deadline_Typical":"Varies","Match_Required":"No","Eligibility":"Northeast Texas organizations","Purpose":"Workforce, economic development","Priority_Area":"Student Success","Priority_Level":"MEDIUM","Contact_Email":"","Website":"https://www.atcog.org/","Relationship_Status":"Cold","Notes":"Regional planning body for Harrison County"}
+];
+
+// === STATE ===
+let state = {
+    filtered: [...grantsData],
+    page: 1,
+    perPage: 20,
+    sort: { col: 'Priority_Level', dir: 'asc' },
+    favorites: JSON.parse(localStorage.getItem('wiley_favorites') || '[]'),
+    pipeline: JSON.parse(localStorage.getItem('wiley_pipeline') || '{}'),
+    notes: JSON.parse(localStorage.getItem('wiley_notes') || '{}'),
+    faculty: JSON.parse(localStorage.getItem('wiley_faculty') || '{}'),
+    savedFilters: JSON.parse(localStorage.getItem('wiley_filters') || '[]'),
+    history: JSON.parse(localStorage.getItem('wiley_history') || '[]'),
+    compare: [],
+    calendarDate: new Date(),
+    theme: localStorage.getItem('wiley_theme') || 'light'
+};
+
+const priorityOrder = { 'HIGHEST': 1, 'HIGH': 2, 'MEDIUM-HIGH': 3, 'MEDIUM': 4, 'LOW-MEDIUM': 5, 'FUTURE': 6 };
+const facultyAreas = ['STEM', 'Education', 'Business', 'Humanities', 'Health Sciences', 'Social Sciences', 'Religious Studies'];
+
+// === INIT ===
+document.addEventListener('DOMContentLoaded', init);
+
+function init() {
+    if (state.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
+    setupTabs();
+    populateFilters();
+    applyFilters();
+    renderDeadlineAlerts();
+    renderSavedFilters();
+    calculateBudget();
+    renderHistory();
+    logHistory('Dashboard opened');
+}
+
+// === THEME ===
+function toggleTheme() {
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', state.theme === 'dark' ? 'dark' : '');
+    localStorage.setItem('wiley_theme', state.theme);
+}
+
+// === TABS ===
+function setupTabs() {
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            tab.classList.add('active');
+            document.getElementById('tab-' + tab.dataset.tab).style.display = 'block';
+            if (tab.dataset.tab === 'calendar') renderCalendar();
+            if (tab.dataset.tab === 'pipeline') renderPipeline();
+            if (tab.dataset.tab === 'analytics') renderCharts();
+            if (tab.dataset.tab === 'history') renderHistory();
+        });
+    });
+}
+
+// === FILTERS ===
+function populateFilters() {
+    const types = [...new Set(grantsData.map(g => g.Funder_Type))].sort();
+    const areas = [...new Set(grantsData.map(g => g.Priority_Area))].sort();
+    const priorities = ['HIGHEST', 'HIGH', 'MEDIUM-HIGH', 'MEDIUM', 'LOW-MEDIUM', 'FUTURE'];
+    const statuses = [...new Set(grantsData.map(g => g.Relationship_Status))].sort();
+
+    types.forEach(t => document.getElementById('filter-type').innerHTML += `<option value="${t}">${t}</option>`);
+    areas.forEach(a => document.getElementById('filter-area').innerHTML += `<option value="${a}">${a}</option>`);
+    priorities.forEach(p => document.getElementById('filter-priority').innerHTML += `<option value="${p}">${p}</option>`);
+    statuses.forEach(s => document.getElementById('filter-status').innerHTML += `<option value="${s}">${s}</option>`);
+    facultyAreas.forEach(f => document.getElementById('filter-faculty').innerHTML += `<option value="${f}">${f}</option>`);
+}
+
+function applyFilters() {
+    const search = document.getElementById('search').value.toLowerCase();
+    const type = document.getElementById('filter-type').value;
+    const area = document.getElementById('filter-area').value;
+    const priority = document.getElementById('filter-priority').value;
+    const amount = parseInt(document.getElementById('filter-amount').value) || 0;
+    const status = document.getElementById('filter-status').value;
+    const pipeline = document.getElementById('filter-pipeline').value;
+    const faculty = document.getElementById('filter-faculty').value;
+    const match = document.getElementById('filter-match').value;
+
+    state.filtered = grantsData.filter(g => {
+        if (search && ![g.Funder_Name, g.Program_Name, g.Purpose, g.Notes].join(' ').toLowerCase().includes(search)) return false;
+        if (type && g.Funder_Type !== type) return false;
+        if (area && g.Priority_Area !== area) return false;
+        if (priority && g.Priority_Level !== priority) return false;
+        if (amount && g.Award_Max < amount) return false;
+        if (status && g.Relationship_Status !== status) return false;
+        if (pipeline && state.pipeline[g.ID] !== pipeline) return false;
+        if (faculty && !(state.faculty[g.ID] || []).includes(faculty)) return false;
+        if (match === 'No' && g.Match_Required !== 'No') return false;
+        if (match === 'Yes' && g.Match_Required === 'No') return false;
+        return true;
+    });
+
+    sortData();
+    state.page = 1;
+    renderTable();
+    updateStats();
+}
+
+function resetFilters() {
+    document.getElementById('search').value = '';
+    document.querySelectorAll('.filters-grid select').forEach(s => s.value = '');
+    applyFilters();
+}
+
+function showFavoritesOnly() {
+    state.filtered = grantsData.filter(g => state.favorites.includes(g.ID));
+    state.page = 1;
+    renderTable();
+    updateStats();
+}
+
+// === SORTING ===
+function sortData() {
+    state.filtered.sort((a, b) => {
+        let av = a[state.sort.col], bv = b[state.sort.col];
+        if (state.sort.col === 'Priority_Level') { av = priorityOrder[av] || 99; bv = priorityOrder[bv] || 99; }
+        if (state.sort.col === 'Award_Max') { av = parseInt(av) || 0; bv = parseInt(bv) || 0; }
+        if (av < bv) return state.sort.dir === 'asc' ? -1 : 1;
+        if (av > bv) return state.sort.dir === 'asc' ? 1 : -1;
+        return 0;
+    });
+}
+
+document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+        if (state.sort.col === th.dataset.sort) state.sort.dir = state.sort.dir === 'asc' ? 'desc' : 'asc';
+        else { state.sort.col = th.dataset.sort; state.sort.dir = 'asc'; }
+        sortData();
+        renderTable();
+    });
+});
+
+// === TABLE ===
+function renderTable() {
+    const start = (state.page - 1) * state.perPage;
+    const pageData = state.filtered.slice(start, start + state.perPage);
+
+    document.getElementById('table-body').innerHTML = pageData.map(g => `
+        <tr>
+            <td><button class="star-btn ${state.favorites.includes(g.ID) ? 'active' : ''}" onclick="toggleFavorite('${g.ID}')">★</button></td>
+            <td><input type="checkbox" class="compare-check" ${state.compare.includes(g.ID) ? 'checked' : ''} onchange="toggleCompare('${g.ID}')"></td>
+            <td><strong>${g.Funder_Name}</strong></td>
+            <td>${g.Program_Name}</td>
+            <td><span class="badge badge-${getTypeClass(g.Funder_Type)}">${g.Funder_Type}</span></td>
+            <td>${formatMoney(g.Award_Max)}</td>
+            <td>${g.Deadline_Typical}</td>
+            <td><span class="badge badge-${g.Priority_Level.toLowerCase()}">${g.Priority_Level}</span></td>
+            <td>${renderPipelineSelect(g.ID)}</td>
+            <td><button class="btn btn-sm btn-primary" onclick="openDetail('${g.ID}')">View</button></td>
+        </tr>
+    `).join('');
+
+    document.getElementById('page-info').textContent = `Showing ${start + 1}-${Math.min(start + state.perPage, state.filtered.length)} of ${state.filtered.length}`;
+}
+
+function renderPipelineSelect(id) {
+    const val = state.pipeline[id] || '';
+    return `<select class="btn-sm" onchange="setPipeline('${id}', this.value)" style="padding:3px 6px;font-size:0.7rem;">
+        <option value="" ${!val ? 'selected' : ''}>-</option>
+        <option value="identified" ${val === 'identified' ? 'selected' : ''}>Identified</option>
+        <option value="development" ${val === 'development' ? 'selected' : ''}>Development</option>
+        <option value="submitted" ${val === 'submitted' ? 'selected' : ''}>Submitted</option>
+        <option value="awarded" ${val === 'awarded' ? 'selected' : ''}>Awarded</option>
+        <option value="declined" ${val === 'declined' ? 'selected' : ''}>Declined</option>
+    </select>`;
+}
+
+function changePage(d) {
+    const maxPage = Math.ceil(state.filtered.length / state.perPage);
+    state.page = Math.max(1, Math.min(state.page + d, maxPage));
+    renderTable();
+}
+
+// === STATS ===
+function updateStats() {
+    document.getElementById('stat-total').textContent = grantsData.length;
+    document.getElementById('stat-filtered').textContent = state.filtered.length;
+    document.getElementById('stat-favorites').textContent = state.favorites.length;
+    document.getElementById('stat-highest').textContent = state.filtered.filter(g => g.Priority_Level === 'HIGHEST').length;
+    document.getElementById('stat-30days').textContent = getUpcoming30().length;
+    document.getElementById('stat-pipeline').textContent = Object.keys(state.pipeline).filter(k => state.pipeline[k] && state.pipeline[k] !== 'declined').length;
+    document.getElementById('stat-maxfund').textContent = formatMoney(state.filtered.reduce((s, g) => s + (g.Award_Max || 0), 0));
+}
+
+// === FAVORITES ===
+function toggleFavorite(id) {
+    if (state.favorites.includes(id)) state.favorites = state.favorites.filter(f => f !== id);
+    else state.favorites.push(id);
+    localStorage.setItem('wiley_favorites', JSON.stringify(state.favorites));
+    logHistory(`${state.favorites.includes(id) ? 'Added' : 'Removed'} favorite: ${grantsData.find(g => g.ID === id)?.Program_Name}`);
+    renderTable();
+    updateStats();
+}
+
+// === PIPELINE ===
+function setPipeline(id, val) {
+    if (val) state.pipeline[id] = val;
+    else delete state.pipeline[id];
+    localStorage.setItem('wiley_pipeline', JSON.stringify(state.pipeline));
+    logHistory(`Pipeline updated: ${grantsData.find(g => g.ID === id)?.Program_Name} → ${val || 'removed'}`);
+    updateStats();
+}
+
+// === COMPARE ===
+function toggleCompare(id) {
+    if (state.compare.includes(id)) state.compare = state.compare.filter(c => c !== id);
+    else if (state.compare.length < 4) state.compare.push(id);
+    renderComparePanel();
+}
+
+function renderComparePanel() {
+    const panel = document.getElementById('compare-panel');
+    if (state.compare.length === 0) { panel.classList.remove('show'); return; }
+    panel.classList.add('show');
+    document.getElementById('compare-list').innerHTML = state.compare.map(id => {
+        const g = grantsData.find(x => x.ID === id);
+        return `<span class="compare-item">${g.Program_Name.substring(0, 25)}... <button class="remove" onclick="toggleCompare('${id}')">×</button></span>`;
+    }).join('');
+}
+
+function clearCompare() { state.compare = []; renderComparePanel(); renderTable(); }
+
+function openCompareModal() {
+    if (state.compare.length < 2) return alert('Select at least 2 grants to compare');
+    const grants = state.compare.map(id => grantsData.find(g => g.ID === id));
+    document.getElementById('compare-body').innerHTML = `
+        <table style="width:100%">
+            <tr><th>Field</th>${grants.map(g => `<th>${g.Program_Name}</th>`).join('')}</tr>
+            <tr><td>Funder</td>${grants.map(g => `<td>${g.Funder_Name}</td>`).join('')}</tr>
+            <tr><td>Type</td>${grants.map(g => `<td>${g.Funder_Type}</td>`).join('')}</tr>
+            <tr><td>Award Range</td>${grants.map(g => `<td>${formatMoney(g.Award_Min)} - ${formatMoney(g.Award_Max)}</td>`).join('')}</tr>
+            <tr><td>Deadline</td>${grants.map(g => `<td>${g.Deadline_Typical}</td>`).join('')}</tr>
+            <tr><td>Priority</td>${grants.map(g => `<td><span class="badge badge-${g.Priority_Level.toLowerCase()}">${g.Priority_Level}</span></td>`).join('')}</tr>
+            <tr><td>Match Required</td>${grants.map(g => `<td>${g.Match_Required}</td>`).join('')}</tr>
+            <tr><td>Priority Area</td>${grants.map(g => `<td>${g.Priority_Area}</td>`).join('')}</tr>
+            <tr><td>Purpose</td>${grants.map(g => `<td style="font-size:0.8rem">${g.Purpose}</td>`).join('')}</tr>
+        </table>`;
+    document.getElementById('modal-compare').classList.add('show');
+}
+
+// === DETAIL MODAL ===
+function openDetail(id) {
+    const g = grantsData.find(x => x.ID === id);
+    document.getElementById('modal-title').textContent = g.Program_Name;
+    document.getElementById('modal-subtitle').textContent = g.Funder_Name;
+
+    document.getElementById('modal-body').innerHTML = `
+        <div class="modal-section">
+            <h3>Funding Details</h3>
+            <div class="modal-grid">
+                <div class="modal-item"><label>Award Range</label><div>${formatMoney(g.Award_Min)} - ${formatMoney(g.Award_Max)}</div></div>
+                <div class="modal-item"><label>Project Period</label><div>${g.Project_Period_Years} years</div></div>
+                <div class="modal-item"><label>Deadline</label><div>${g.Deadline_Typical}</div></div>
+                <div class="modal-item"><label>Match Required</label><div>${g.Match_Required}</div></div>
+                ${g.CFDA_Number ? `<div class="modal-item"><label>CFDA</label><div>${g.CFDA_Number}</div></div>` : ''}
+            </div>
+        </div>
+        <div class="modal-section">
+            <h3>Details</h3>
+            <div class="modal-grid">
+                <div class="modal-item full"><label>Eligibility</label><div>${g.Eligibility}</div></div>
+                <div class="modal-item full"><label>Purpose</label><div>${g.Purpose}</div></div>
+                <div class="modal-item full"><label>Notes</label><div>${g.Notes}</div></div>
+            </div>
+        </div>
+        <div class="modal-section">
+            <h3>Pipeline & Tracking</h3>
+            <div class="modal-grid">
+                <div class="modal-item"><label>Pipeline Stage</label><div>${renderPipelineSelect(id)}</div></div>
+                <div class="modal-item"><label>Priority</label><div><span class="badge badge-${g.Priority_Level.toLowerCase()}">${g.Priority_Level}</span></div></div>
+                <div class="modal-item"><label>Relationship</label><div>${g.Relationship_Status}</div></div>
+            </div>
+        </div>
+        <div class="modal-section">
+            <h3>Faculty Tags</h3>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+                ${facultyAreas.map(f => `<button class="btn btn-sm ${(state.faculty[id] || []).includes(f) ? 'btn-info' : 'btn-secondary'}" onclick="toggleFaculty('${id}','${f}')">${f}</button>`).join('')}
+            </div>
+            <div class="faculty-tags">${(state.faculty[id] || []).map(f => `<span class="faculty-tag">${f}</span>`).join('')}</div>
+        </div>
+        <div class="modal-section notes-section">
+            <h3>Internal Notes</h3>
+            <textarea id="note-input" placeholder="Add notes...">${state.notes[id] || ''}</textarea>
+            <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="saveNote('${id}')">Save Notes</button>
+        </div>
+        ${g.Website ? `<div class="modal-section"><a href="${g.Website}" target="_blank" class="btn btn-success">Visit Website →</a></div>` : ''}
+    `;
+    document.getElementById('modal-detail').classList.add('show');
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// === NOTES ===
+function saveNote(id) {
+    const note = document.getElementById('note-input').value;
+    if (note) state.notes[id] = note;
+    else delete state.notes[id];
+    localStorage.setItem('wiley_notes', JSON.stringify(state.notes));
+    logHistory(`Note saved for: ${grantsData.find(g => g.ID === id)?.Program_Name}`);
+    alert('Note saved!');
+}
+
+// === FACULTY ===
+function toggleFaculty(id, area) {
+    if (!state.faculty[id]) state.faculty[id] = [];
+    if (state.faculty[id].includes(area)) state.faculty[id] = state.faculty[id].filter(f => f !== area);
+    else state.faculty[id].push(area);
+    if (state.faculty[id].length === 0) delete state.faculty[id];
+    localStorage.setItem('wiley_faculty', JSON.stringify(state.faculty));
+    openDetail(id);
+}
+
+// === SAVED FILTERS ===
+function saveCurrentFilter() { document.getElementById('modal-savefilter').classList.add('show'); }
+
+function confirmSaveFilter() {
+    const name = document.getElementById('filter-name').value;
+    if (!name) return alert('Enter a name');
+    const filter = {
+        name,
+        search: document.getElementById('search').value,
+        type: document.getElementById('filter-type').value,
+        area: document.getElementById('filter-area').value,
+        priority: document.getElementById('filter-priority').value,
+        amount: document.getElementById('filter-amount').value,
+        status: document.getElementById('filter-status').value,
+        pipeline: document.getElementById('filter-pipeline').value,
+        faculty: document.getElementById('filter-faculty').value,
+        match: document.getElementById('filter-match').value
+    };
+    state.savedFilters.push(filter);
+    localStorage.setItem('wiley_filters', JSON.stringify(state.savedFilters));
+    logHistory(`Filter saved: ${name}`);
+    closeModal('modal-savefilter');
+    document.getElementById('filter-name').value = '';
+    renderSavedFilters();
+}
+
+function renderSavedFilters() {
+    const panel = document.getElementById('saved-filters-panel');
+    if (state.savedFilters.length === 0) { panel.style.display = 'none'; return; }
+    panel.style.display = 'block';
+    document.getElementById('saved-filters-list').innerHTML = state.savedFilters.map((f, i) =>
+        `<div class="saved-filter" onclick="loadFilter(${i})">${f.name} <button class="delete" onclick="event.stopPropagation();deleteFilter(${i})">×</button></div>`
+    ).join('');
+}
+
+function loadFilter(i) {
+    const f = state.savedFilters[i];
+    document.getElementById('search').value = f.search || '';
+    document.getElementById('filter-type').value = f.type || '';
+    document.getElementById('filter-area').value = f.area || '';
+    document.getElementById('filter-priority').value = f.priority || '';
+    document.getElementById('filter-amount').value = f.amount || '';
+    document.getElementById('filter-status').value = f.status || '';
+    document.getElementById('filter-pipeline').value = f.pipeline || '';
+    document.getElementById('filter-faculty').value = f.faculty || '';
+    document.getElementById('filter-match').value = f.match || '';
+    applyFilters();
+}
+
+function deleteFilter(i) {
+    state.savedFilters.splice(i, 1);
+    localStorage.setItem('wiley_filters', JSON.stringify(state.savedFilters));
+    renderSavedFilters();
+}
+
+// === DEADLINE ALERTS ===
+function getUpcoming30() {
+    const months = { 'january': 0, 'february': 1, 'march': 2, 'april': 3, 'may': 4, 'june': 5, 'july': 6, 'august': 7, 'september': 8, 'october': 9, 'november': 10, 'december': 11 };
+    const now = new Date();
+    const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+    return grantsData.filter(g => {
+        const dl = g.Deadline_Typical.toLowerCase();
+        for (const [m, idx] of Object.entries(months)) {
+            if (dl.includes(m)) {
+                const deadline = new Date(now.getFullYear(), idx, 15);
+                if (deadline < now) deadline.setFullYear(deadline.getFullYear() + 1);
+                return deadline >= now && deadline <= in30;
+            }
+        }
+        return false;
+    });
+}
+
+function renderDeadlineAlerts() {
+    const upcoming = getUpcoming30();
+    if (upcoming.length === 0) { document.getElementById('deadline-alerts').innerHTML = ''; return; }
+    document.getElementById('deadline-alerts').innerHTML = `
+        <div class="alert-banner ${upcoming.length > 3 ? 'danger' : ''}">
+            <span class="alert-icon">⚠️</span>
+            <div><strong>${upcoming.length} grant(s) due within 30 days!</strong> ${upcoming.slice(0, 3).map(g => g.Program_Name).join(', ')}${upcoming.length > 3 ? '...' : ''}</div>
+        </div>`;
+}
+
+// === CALENDAR ===
+function renderCalendar() {
+    const year = state.calendarDate.getFullYear();
+    const month = state.calendarDate.getMonth();
+    document.getElementById('calendar-title').textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    let html = '<div class="calendar-header">Sun</div><div class="calendar-header">Mon</div><div class="calendar-header">Tue</div><div class="calendar-header">Wed</div><div class="calendar-header">Thu</div><div class="calendar-header">Fri</div><div class="calendar-header">Sat</div>';
+
+    for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day other-month"></div>';
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
+        const events = getEventsForDate(year, month, d);
+        html += `<div class="calendar-day ${isToday ? 'today' : ''}">
+            <div class="calendar-day-number">${d}</div>
+            ${events.map(e => `<div class="calendar-event priority-${e.Priority_Level.toLowerCase()}" onclick="openDetail('${e.ID}')">${e.Program_Name.substring(0, 15)}...</div>`).join('')}
+        </div>`;
+    }
+
+    document.getElementById('calendar-grid').innerHTML = html;
+}
+
+function getEventsForDate(year, month, day) {
+    const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+    const monthName = months[month];
+    return grantsData.filter(g => g.Deadline_Typical.toLowerCase().includes(monthName) && day >= 1 && day <= 15);
+}
+
+function changeMonth(d) {
+    state.calendarDate.setMonth(state.calendarDate.getMonth() + d);
+    renderCalendar();
+}
+
+// === PIPELINE VIEW ===
+function renderPipeline() {
+    const stages = ['identified', 'development', 'submitted', 'awarded', 'declined'];
+    const labels = { identified: 'Identified', development: 'In Development', submitted: 'Submitted', awarded: 'Awarded', declined: 'Declined' };
+    const colors = { identified: '#1565c0', development: '#e65100', submitted: '#7b1fa2', awarded: '#2e7d32', declined: '#c62828' };
+
+    let html = '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">';
+    stages.forEach(stage => {
+        const items = Object.entries(state.pipeline).filter(([id, s]) => s === stage).map(([id]) => grantsData.find(g => g.ID === id)).filter(Boolean);
+        html += `<div style="background:var(--light);border-radius:10px;padding:10px;">
+            <div style="font-weight:600;margin-bottom:10px;color:${colors[stage]}">${labels[stage]} (${items.length})</div>
+            ${items.map(g => `<div style="background:var(--card-bg);padding:8px;border-radius:6px;margin-bottom:8px;font-size:0.8rem;cursor:pointer;border-left:3px solid ${colors[stage]}" onclick="openDetail('${g.ID}')">
+                <strong>${g.Program_Name}</strong><br><span style="color:var(--gray)">${formatMoney(g.Award_Max)}</span>
+            </div>`).join('')}
+        </div>`;
+    });
+    html += '</div>';
+    document.getElementById('pipeline-board').innerHTML = html;
+}
+
+// === CHARTS ===
+function renderCharts() {
+    const byType = {}, byArea = {}, byPriority = {};
+    grantsData.forEach(g => {
+        byType[g.Funder_Type] = (byType[g.Funder_Type] || 0) + 1;
+        byArea[g.Priority_Area] = (byArea[g.Priority_Area] || 0) + 1;
+        byPriority[g.Priority_Level] = (byPriority[g.Priority_Level] || 0) + 1;
+    });
+
+    const colors = ['#4B0082', '#17a2b8', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14'];
+    const maxType = Math.max(...Object.values(byType));
+    const maxArea = Math.max(...Object.values(byArea));
+
+    document.getElementById('charts-container').innerHTML = `
+        <div class="chart-container">
+            <div class="chart-title">Grants by Funder Type</div>
+            <div class="bar-chart">
+                ${Object.entries(byType).map(([k, v], i) => `
+                    <div class="bar-row">
+                        <div class="bar-label">${k}</div>
+                        <div class="bar-track"><div class="bar-fill" style="width:${v / maxType * 100}%;background:${colors[i % colors.length]}"></div></div>
+                        <div class="bar-value">${v}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Grants by Priority Area</div>
+            <div class="bar-chart">
+                ${Object.entries(byArea).map(([k, v], i) => `
+                    <div class="bar-row">
+                        <div class="bar-label">${k}</div>
+                        <div class="bar-track"><div class="bar-fill" style="width:${v / maxArea * 100}%;background:${colors[i % colors.length]}"></div></div>
+                        <div class="bar-value">${v}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Grants by Priority Level</div>
+            <div class="bar-chart">
+                ${['HIGHEST', 'HIGH', 'MEDIUM-HIGH', 'MEDIUM', 'FUTURE'].map((p, i) => `
+                    <div class="bar-row">
+                        <div class="bar-label">${p}</div>
+                        <div class="bar-track"><div class="bar-fill" style="width:${(byPriority[p] || 0) / Math.max(...Object.values(byPriority)) * 100}%;background:${colors[i]}"></div></div>
+                        <div class="bar-value">${byPriority[p] || 0}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Pipeline Summary</div>
+            <div class="bar-chart">
+                ${['identified', 'development', 'submitted', 'awarded', 'declined'].map((s, i) => {
+                    const count = Object.values(state.pipeline).filter(v => v === s).length;
+                    return `<div class="bar-row">
+                        <div class="bar-label">${s}</div>
+                        <div class="bar-track"><div class="bar-fill" style="width:${count ? count / Math.max(1, ...Object.values(state.pipeline).reduce((a, v) => { a[v] = (a[v] || 0) + 1; return a; }, {})) * 100 : 0}%;background:${colors[i]}"></div></div>
+                        <div class="bar-value">${count}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// === BUDGET CALCULATOR ===
+function calculateBudget() {
+    const direct = parseFloat(document.getElementById('calc-direct').value) || 0;
+    const idcRate = parseFloat(document.getElementById('calc-idc').value) || 0;
+    const matchRate = parseFloat(document.getElementById('calc-match').value) || 0;
+    const years = parseInt(document.getElementById('calc-years').value) || 1;
+
+    const indirect = direct * (idcRate / 100);
+    const total = direct + indirect;
+    const matchAmt = total * (matchRate / 100);
+    const multiyear = total * years;
+
+    document.getElementById('calc-total').textContent = formatMoney(total);
+    document.getElementById('calc-indirect').textContent = formatMoney(indirect);
+    document.getElementById('calc-matchamt').textContent = formatMoney(matchAmt);
+    document.getElementById('calc-multiyear').textContent = formatMoney(multiyear);
+}
+
+// === HISTORY ===
+function logHistory(action) {
+    state.history.unshift({ time: new Date().toISOString(), action });
+    if (state.history.length > 100) state.history.pop();
+    localStorage.setItem('wiley_history', JSON.stringify(state.history));
+}
+
+function renderHistory() {
+    document.getElementById('history-list').innerHTML = state.history.slice(0, 50).map(h =>
+        `<div class="history-item"><div class="time">${new Date(h.time).toLocaleString()}</div><div>${h.action}</div></div>`
+    ).join('') || '<div class="history-item">No history yet</div>';
+}
+
+function clearHistory() {
+    if (confirm('Clear all history?')) {
+        state.history = [];
+        localStorage.setItem('wiley_history', JSON.stringify(state.history));
+        renderHistory();
+    }
+}
+
+// === EXPORT ===
+function exportAll() {
+    const data = grantsData.map(g => ({
+        ...g,
+        Pipeline: state.pipeline[g.ID] || '',
+        Favorite: state.favorites.includes(g.ID) ? 'Yes' : '',
+        Notes: state.notes[g.ID] || '',
+        Faculty: (state.faculty[g.ID] || []).join('; ')
+    }));
+    downloadCSV(data, 'Wiley_Grants_Full_Export.csv');
+}
+
+function exportPipeline() {
+    const data = Object.entries(state.pipeline).map(([id, stage]) => {
+        const g = grantsData.find(x => x.ID === id);
+        return g ? { ...g, Pipeline_Stage: stage, Notes: state.notes[id] || '' } : null;
+    }).filter(Boolean);
+    downloadCSV(data, 'Wiley_Grants_Pipeline.csv');
+}
+
+function downloadCSV(data, filename) {
+    if (data.length === 0) return alert('No data to export');
+    const headers = Object.keys(data[0]);
+    const csv = [headers.join(','), ...data.map(row => headers.map(h => {
+        let v = row[h] || '';
+        if (typeof v === 'string' && (v.includes(',') || v.includes('"'))) v = `"${v.replace(/"/g, '""')}"`;
+        return v;
+    }).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+}
+
+// === HELPERS ===
+function formatMoney(n) {
+    if (!n || n === 0) return 'Varies';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+}
+
+function getTypeClass(t) {
+    if (t === 'Federal') return 'federal';
+    if (t === 'Corporate') return 'corporate';
+    if (t === 'Religious') return 'religious';
+    if (t === 'State') return 'state';
+    return 'foundation';
+}
+
+// Close modals on escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show')); });
+</script>
+</body>
+</html>
